@@ -8,7 +8,7 @@ A beautiful, modern theme for exporting Org-mode files to HTML, inspired by [mdB
 - 🎨 **Multiple Themes** - Light, Rust, Navy, and Ayu color schemes
 - 📱 **Responsive Design** - Works on desktop and mobile
 - ⌨ **Keyboard Shortcuts** - `S` to toggle sidebar, `T` for theme menu, arrows for moving between chapters
-- 🔍 `TODO` **Scroll-synced TOC** - Active section highlighted as you scroll
+- 🔍 **Scroll-synced TOC** - Active section highlighted as you scroll
 - 💾 **Persistent Settings** - Theme and sidebar state saved in localStorage
 
 ## Comparison with Alternatives

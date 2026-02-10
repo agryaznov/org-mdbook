@@ -166,8 +166,8 @@
     var body = document.body;
 
     // Apply saved theme immediately to minimize flash
-    var savedTheme = 'light';
-    try { savedTheme = localStorage.getItem('org-mdbook-theme') || 'light'; } catch (e) {}
+    var savedTheme = 'ayu';
+    try { savedTheme = localStorage.getItem('org-mdbook-theme') || 'ayu'; } catch (e) {}
     html.classList.add(savedTheme);
 
     // Set sidebar state on <html> (matching mdBook)

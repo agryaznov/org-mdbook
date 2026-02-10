@@ -7,6 +7,7 @@ html {
   background-color: var(--bg);
   text-size-adjust: none;
   -webkit-text-size-adjust: none;
+  font-size: 90%;
 }
 
 body {
@@ -49,8 +50,9 @@ body {
   --searchresults-li-bg: #e4f2fe;
   --search-mark-bg: #a2cff5;
   --code-bg: #f4f4f4;
-  --content-max-width: 750px;
+  --content-max-width: 850px;
   --menu-bar-height: 50px;
+  --svg-filter: invert(0);
 }
 
 .coal {
@@ -83,6 +85,7 @@ body {
   --searchresults-li-bg: #242a2e;
   --search-mark-bg: #355c7d;
   --code-bg: #1f2223;
+  --svg-filter: invert(1);
 }
 
 .navy {
@@ -115,6 +118,7 @@ body {
   --searchresults-li-bg: #2a3052;
   --search-mark-bg: #355c7d;
   --code-bg: #1f2331;
+  --svg-filter: invert(1);
 }
 
 .rust {
@@ -147,6 +151,7 @@ body {
   --searchresults-li-bg: #d5cdc5;
   --search-mark-bg: #e69f67;
   --code-bg: #d7d7cf;
+  --svg-filter: invert(0);
 }
 
 .ayu {
@@ -179,6 +184,7 @@ body {
   --searchresults-li-bg: #1a2732;
   --search-mark-bg: #e6b450;
   --code-bg: #191f26;
+  --svg-filter: invert(1);
 }
 
 /* ========== Sidebar ========== */
@@ -230,7 +236,6 @@ body {
 }
 
 .sidebar .chapter li {
-  display: flex;
   color: var(--sidebar-non-existant);
 }
 
@@ -240,12 +245,14 @@ body {
   color: var(--sidebar-fg);
   text-decoration: none;
   text-overflow: ellipsis;
+  overflow: hidden;
   white-space: nowrap;
 }
 
 .sidebar .chapter ul {
-  padding-top: 2em;
-  padding-left: 0;
+  list-style: none outside none;
+  padding-left: 20px;
+  line-height: 1.9em;
 }
 
 .sidebar .chapter li a:hover {
@@ -255,12 +262,6 @@ body {
 .sidebar .chapter li.active > a,
 .sidebar .chapter li a.active {
   color: var(--sidebar-active);
-}
-
-.sidebar .chapter .section {
-  list-style: none;
-  padding-left: 20px;
-  line-height: 1.9em;
 }
 
 .sidebar .spacer {
@@ -497,6 +498,11 @@ code {
   font-size: 0.875em;
 }
 
+/* SVG */
+img.org-svg {
+    filter: var(--svg-filter);
+}
+
 /* Inline code */
 :not(pre) > code {
   padding: 0.1em 0.3em;
@@ -517,6 +523,35 @@ pre > code {
   padding: 0;
   overflow: visible;
   background: none;
+}
+
+/* Strip any background-color Emacs bakes onto individual spans (e.g. "&" in Rust) */
+pre.src span[style*="background-color"] {
+  background-color: transparent !important;
+}
+
+/* ========== Syntax highlight overrides for light themes ==========
+   org-mode bakes inline styles from Emacs's active color theme
+   (typically a dark theme like Tomorrow Night). Remap those colors
+   to readable equivalents for light backgrounds. */
+:root pre.src span, .light pre.src span, .rust pre.src span {
+  /* default/base text — light gray becomes dark gray */
+  &[style*="color: #c5c8c6"] { color: #383a42 !important; }
+  /* keywords — light purple → deep purple */
+  &[style*="color: #b294bb"] { color: #a626a4 !important; }
+  /* types — pale yellow → dark amber */
+  &[style*="color: #f0c674"] { color: #986801 !important; }
+  /* variables/fields — salmon → strong red */
+  &[style*="color: #cc6666"] { color: #c0392b !important; }
+  /* functions/builtins — light blue → strong blue */
+  &[style*="color: #81a2be"] { color: #4078f2 !important; }
+  /* constants/operators — pale orange → dark orange */
+  &[style*="color: #de935f"] { color: #c18401 !important; }
+  /* strings — pale green → forest green */
+  &[style*="color: #b5bd68"] { color: #50a14f !important; }
+  /* comments — near-black or medium gray → readable muted gray */
+  &[style*="color: #5a5b5a"] { color: #848484 !important; }
+  &[style*="color: #717171"] { color: #9a9a9a !important; }
 }
 
 /* ========== Blockquotes ========== */

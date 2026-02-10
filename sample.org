@@ -125,6 +125,72 @@ Add to your =init.el=:
 (org-mdbook-enable)
 #+end_src
 
+** Rust code example
+
+Example 1:
+
+#+BEGIN_SRC rust
+#[derive(Clone, Serialize, Deserialize)]
+struct FileRecord {
+    id:          String,           // UUID
+    short_code:  String,           // 8-char base-62 token
+    name:        String,
+    size:        i64,
+    mime_type:   String,
+    storage_key: String,           // path fragment on File Store
+    owner:       String,
+    status:      String,           // "pending" | "ready" | "deleted"
+    uploaded_at: DateTime<Utc>,
+    sha256:      String,           // hex-encoded SHA-256 of the complete file
+}
+
+// Two indexes, kept in sync and shared across Axum handlers
+struct Index {
+    by_code:  HashMap<String, FileRecord>,       // short_code → record
+    by_owner: HashMap<String, Vec<FileRecord>>,  // owner → list
+}
+type SharedIndex = Arc<RwLock<Index>>;
+#+END_SRC
+
+Example 2:
+
+#+BEGIN_SRC rust
+// Called for each PUT /store/{upload_id}/chunk/{n}
+async fn write_chunk(
+    tmp_dir: &Path,
+    upload_id: &str,
+    n: usize,
+    mut body: impl Stream<Item = Result<Bytes, axum::Error>> + Unpin,
+    expected_hex: &str,
+) -> Result<(), AppError> {
+    let path = tmp_dir.join(upload_id).join(format!("chunk_{n}"));
+    let mut file = File::create(&path).await?;
+    let mut hasher = Sha256::new();
+
+    // Feed each incoming chunk simultaneously to disk and hasher —
+    // single pass, no extra memory, no re-read from disk.
+    while let Some(chunk) = body.next().await {
+        let bytes = chunk?;
+        hasher.update(&bytes);
+        file.write_all(&bytes).await?;
+    }
+    file.flush().await?;
+
+    let got = hex::encode(hasher.finalize());
+    if got != expected_hex {
+        tokio::fs::remove_file(&path).await.ok();
+        return Err(AppError::HashMismatch {
+            n,
+            got,
+            expected: expected_hex.to_string(),
+        });
+    }
+    Ok(())
+}
+#+END_SRC
+
+
+
 * Configuration
 
 ** Theme Options
