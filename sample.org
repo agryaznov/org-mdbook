@@ -1,0 +1,161 @@
+#+TITLE: Sample Documentation
+#+AUTHOR: Your Name
+#+SETUPFILE: org-mdbook.setup
+
+* Introduction
+
+Welcome to this sample documentation! This demonstrates the mdBook-style theme for org-mode HTML export.
+
+The theme features:
+
+- A toggleable sidebar with table of contents
+- Multiple color themes (Light, Rust, Navy, Ayu)
+- Responsive design for mobile devices
+- Keyboard shortcuts for power users
+
+** Getting Started
+
+To use this theme, simply add the setup file to your org document:
+
+#+begin_src org
+#+SETUPFILE: path/to/org-mdbook.setup
+#+end_src
+
+Then export with =C-c C-e h h=.
+
+** Keyboard Shortcuts
+
+| Key | Action              |
+|-----+---------------------|
+| S   | Toggle sidebar      |
+| T   | Open theme menu     |
+
+* Features
+
+** Code Blocks
+
+The theme supports syntax highlighting for code blocks:
+
+#+begin_src python
+def hello_world():
+    """A simple greeting function."""
+    message = "Hello, World!"
+    print(message)
+    return message
+
+if __name__ == "__main__":
+    hello_world()
+#+end_src
+
+#+begin_src emacs-lisp
+(defun my-org-export ()
+  "Export current buffer to HTML with mdBook theme."
+  (interactive)
+  (org-mdbook-export-to-html))
+#+end_src
+
+** Blockquotes
+
+#+begin_quote
+This is a blockquote. It can contain multiple paragraphs and is styled
+with a distinctive left border.
+
+This is the second paragraph of the quote.
+#+end_quote
+
+** Tables
+
+| Name     | Language | Year |
+|----------+----------+------|
+| Rust     | Systems  | 2010 |
+| Go       | Systems  | 2009 |
+| Python   | General  | 1991 |
+| Emacs    | Editor   | 1976 |
+
+** Lists
+
+Unordered list:
+
+- First item
+- Second item
+  - Nested item
+  - Another nested item
+- Third item
+
+Ordered list:
+
+1. First step
+2. Second step
+3. Third step
+
+** Links and Emphasis
+
+This is a paragraph with *bold text*, /italic text/, =inline code=, 
+and a [[https://orgmode.org][link to org-mode]].
+
+* Installation
+
+** Method 1: Per-file Setup
+
+1. Copy =org-mdbook.css=, =org-mdbook.js=, and =org-mdbook.setup= to your project directory
+
+2. Add to your org file:
+   #+begin_src org
+   #+SETUPFILE: org-mdbook.setup
+   #+end_src
+
+3. Export with =C-c C-e h h=
+
+** Method 2: Global Emacs Configuration
+
+Add to your =init.el=:
+
+#+begin_src emacs-lisp
+;; Load org-mdbook
+(add-to-list 'load-path "~/.emacs.d/org-mdbook/")
+(require 'org-mdbook)
+
+;; Set resources directory
+(setq org-mdbook-resources-dir "~/.emacs.d/org-mdbook/")
+
+;; Optional: embed resources in HTML (default: t)
+(setq org-mdbook-embed-resources t)
+
+;; Enable globally (or use org-mdbook-export-to-html for single files)
+(org-mdbook-enable)
+#+end_src
+
+* Configuration
+
+** Theme Options
+
+The theme supports four color schemes:
+
+1. *Light* - Default light theme
+2. *Rust* - Warm, brownish theme inspired by Rust documentation
+3. *Navy* - Dark blue theme
+4. *Ayu* - Dark theme with amber accents
+
+Users can switch themes using the paint palette icon in the menu bar.
+
+** Customization
+
+You can customize the CSS by modifying =org-mdbook.css=. Key CSS variables:
+
+#+begin_src css
+:root {
+  --bg: #ffffff;           /* Background color */
+  --fg: #333333;           /* Text color */
+  --sidebar-bg: #fafafa;   /* Sidebar background */
+  --link: #4183c4;         /* Link color */
+  --code-bg: #fdf6e3;      /* Code block background */
+}
+#+end_src
+
+* Conclusion
+
+This mdBook-style theme provides a clean, modern documentation experience
+for org-mode users. The toggleable sidebar, multiple themes, and responsive
+design make it suitable for both personal notes and public documentation.
+
+Happy writing! 📝

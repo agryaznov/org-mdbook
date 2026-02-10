@@ -1,0 +1,11 @@
+# -*- mode: org; -*-
+# org-mdbook theme setup file
+# Usage: #+SETUPFILE: path/to/org-mdbook.setup
+
+#+OPTIONS: html-style:nil toc:t num:nil html5-fancy:t
+#+HTML_DOCTYPE: html5
+#+HTML_HEAD: <meta name="viewport" content="width=device-width, initial-scale=1">
+#+HTML_HEAD: <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Source+Code+Pro&display=swap" rel="stylesheet">
+#+HTML_HEAD: <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="org-mdbook.css" />
+#+HTML_HEAD_EXTRA: <script src="org-mdbook.js"></script>
