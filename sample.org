@@ -93,6 +93,23 @@ Ordered list:
 This is a paragraph with *bold text*, /italic text/, =inline code=, 
 and a [[https://orgmode.org][link to org-mode]].
 
+* Formatting
+
+Common org-mode inline text formatting:
+
+| Org syntax      | Result          |
+|-----------------+-----------------|
+| =*bold*=        | *bold*          |
+| =/italic/=      | /italic/        |
+| =_underline_=   | _underline_     |
+| =+strike+= | +strikethrough+ |
+| ==code==        | =code=          |
+| =~verbatim~=    | ~verbatim~      |
+
+You can also combine them: *bold and _underline_* or /italic and *bold*/.
+
+Superscript: E=mc^{2}, subscript: H_{2}O.
+
 * Installation
 
 ** Method 1: Per-file Setup

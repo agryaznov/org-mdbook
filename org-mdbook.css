@@ -601,6 +601,9 @@ ul, ol {
   margin: 0.25em 0;
 }
 
+/* ========== Inline formatting ========== */
+.underline { text-decoration: underline; }
+
 /* ========== Hide org elements ========== */
 .section-number-2, .section-number-3, .section-number-4,
 .section-number-5, .section-number-6 {
