@@ -35,6 +35,7 @@
 
 (require 'org)
 (require 'ox-html)
+(require 'org-id)
 
 (defgroup org-mdbook nil
   "Options for the mdBook-style HTML export."
@@ -61,6 +62,48 @@ If nil, reference external files (requires copying them alongside HTML)."
 Set to nil for offline use or to use system fonts."
   :type 'boolean
   :group 'org-mdbook)
+
+;;; ID link resolution
+
+(defun org-mdbook--title-to-slug (title)
+  "Convert TITLE to a hyphen-separated lowercase slug for use as a filename."
+  (downcase
+   (replace-regexp-in-string
+    "-+" "-"
+    (replace-regexp-in-string
+     "[^a-z0-9-]" ""
+     (replace-regexp-in-string
+      "[ \t_]+" "-"
+      (string-trim title))))))
+
+(defun org-mdbook--get-node-title (id)
+  "Return the title of the org node identified by ID, or nil if not found."
+  (let ((location (org-id-find id)))
+    (when location
+      (let ((file (car location))
+            (pos  (cdr location)))
+        (with-current-buffer (or (find-buffer-visiting file)
+                                 (find-file-noselect file t))
+          (save-excursion
+            (save-restriction
+              (widen)
+              (goto-char pos)
+              (if (org-at-heading-p)
+                  (org-get-heading t t t t)
+                (cadr (assoc "TITLE"
+                             (org-collect-keywords '("TITLE"))))))))))))
+
+(defun org-mdbook--html-id-link (link desc info)
+  "Transcode an id: LINK to an HTML anchor pointing to <slug>.html.
+Returns nil when LINK is not an id: link or the node cannot be found,
+falling back to the default `org-html-link' behaviour."
+  (when (string= (org-element-property :type link) "id")
+    (let* ((id    (org-element-property :path link))
+           (title (org-mdbook--get-node-title id)))
+      (when title
+        (format "<a href=\"%s.html\">%s</a>"
+                (org-mdbook--title-to-slug title)
+                (or desc (org-html-encode-plain-text title)))))))
 
 (defvar org-mdbook--saved-settings nil
   "Saved org-html settings to restore after disabling org-mdbook.")
@@ -150,7 +193,10 @@ passed to `org-html-export-to-html'."
         (org-html-doctype "html5")
         (org-html-html5-fancy t)
         (org-html-validation-link nil))
-    (org-html-export-to-html async subtreep visible-only body-only ext-plist)))
+    (advice-add 'org-html-link :before-until #'org-mdbook--html-id-link)
+    (unwind-protect
+        (org-html-export-to-html async subtreep visible-only body-only ext-plist)
+      (advice-remove 'org-html-link #'org-mdbook--html-id-link))))
 
 ;;;###autoload
 (defun org-mdbook-export-as-html (&optional async subtreep visible-only body-only ext-plist)
@@ -164,7 +210,10 @@ passed to `org-html-export-as-html'."
         (org-html-doctype "html5")
         (org-html-html5-fancy t)
         (org-html-validation-link nil))
-    (org-html-export-as-html async subtreep visible-only body-only ext-plist)))
+    (advice-add 'org-html-link :before-until #'org-mdbook--html-id-link)
+    (unwind-protect
+        (org-html-export-as-html async subtreep visible-only body-only ext-plist)
+      (advice-remove 'org-html-link #'org-mdbook--html-id-link))))
 
 ;;;###autoload
 (defun org-mdbook-copy-resources (dest-dir)
