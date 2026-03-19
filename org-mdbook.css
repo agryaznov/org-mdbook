@@ -530,6 +530,36 @@ pre.src span[style*="background-color"] {
   background-color: transparent !important;
 }
 
+/* ========== Code block copy button ========== */
+.org-src-container {
+  position: relative;
+}
+
+.copy-button {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  padding: 0.2rem 0.45rem;
+  background: var(--code-bg);
+  border: 1px solid var(--fg);
+  border-radius: 3px;
+  color: var(--fg);
+  cursor: pointer;
+  font-size: 0.75em;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.org-src-container:hover .copy-button,
+.copy-button:focus {
+  opacity: 1;
+}
+
+.copy-button.copied {
+  color: #4caf50;
+  border-color: #4caf50;
+}
+
 /* ========== Syntax highlight overrides for light themes ==========
    org-mode bakes inline styles from Emacs's active color theme
    (typically a dark theme like Tomorrow Night). Remap those colors

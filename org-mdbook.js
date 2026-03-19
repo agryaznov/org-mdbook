@@ -23,6 +23,7 @@
       initTocHighlight();
       initNavChapters();
       initKeyboardShortcuts();
+      initCodeCopyButtons();
     } catch (e) {
       console.error('org-mdbook initialization error:', e);
     }
@@ -497,6 +498,69 @@
           break;
       }
     });
+  }
+
+  function initCodeCopyButtons() {
+    var pres = document.querySelectorAll('pre.src');
+    for (var i = 0; i < pres.length; i++) {
+      var pre = pres[i];
+
+      // Use existing org-src-container or wrap the pre
+      var container = pre.parentElement;
+      if (!container || !container.classList.contains('org-src-container')) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'org-src-container';
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
+        container = wrapper;
+      }
+
+      var btn = document.createElement('button');
+      btn.className = 'copy-button';
+      btn.title = 'Copy to clipboard';
+      btn.setAttribute('aria-label', 'Copy to clipboard');
+      btn.innerHTML = '<i class="fa fa-copy"></i>';
+
+      (function(btn, pre) {
+        btn.addEventListener('click', function() {
+          var text = (pre.innerText || pre.textContent).replace(/\n$/, '');
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(function() {
+              showCopied(btn);
+            }).catch(function() {
+              fallbackCopy(text, btn);
+            });
+          } else {
+            fallbackCopy(text, btn);
+          }
+        });
+      })(btn, pre);
+
+      container.appendChild(btn);
+    }
+  }
+
+  function showCopied(btn) {
+    btn.classList.add('copied');
+    btn.innerHTML = '<i class="fa fa-check"></i>';
+    setTimeout(function() {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<i class="fa fa-copy"></i>';
+    }, 1500);
+  }
+
+  function fallbackCopy(text, btn) {
+    var textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    try {
+      document.execCommand('copy');
+      showCopied(btn);
+    } catch (e) {}
+    document.body.removeChild(textarea);
   }
 
   function escapeHtml(text) {
