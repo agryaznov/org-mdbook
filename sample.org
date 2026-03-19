@@ -235,6 +235,14 @@ You can customize the CSS by modifying =org-mdbook.css=. Key CSS variables:
 }
 #+end_src
 
+* TODO Items
+
+Headings with a TODO keyword render the keyword as inline code:
+
+** TODO Write more documentation
+
+** TODO Add tests for edge cases
+
 * Conclusion
 
 This mdBook-style theme provides a clean, modern documentation experience
