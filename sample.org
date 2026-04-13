@@ -1,6 +1,6 @@
 #+TITLE: Sample Documentation
 #+AUTHOR: Your Name
-#+SETUPFILE: org-mdbook.setup
+
 
 * Introduction
 
@@ -241,6 +241,9 @@ Headings with a TODO keyword render the keyword as inline code:
 
 ** TODO Write more documentation
 
+** DONE render DONE header
+
+- State "DONE"       from "TODO"       [2026-04-13 Mon 19:23]
 ** TODO Add tests for edge cases
 
 * Conclusion

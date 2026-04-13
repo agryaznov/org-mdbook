@@ -504,7 +504,8 @@ img.org-svg {
 }
 
 /* TODO keywords in headings */
-span.todo {
+span.todo,
+span.done {
   font-family: "Source Code Pro", Consolas, "Ubuntu Mono", Menlo, "DejaVu Sans Mono", monospace, monospace;
   font-size: 0.875em;
   padding: 0.1em 0.3em;

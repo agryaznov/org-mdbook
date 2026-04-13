@@ -137,7 +137,7 @@ falling back to the default `org-html-link' behaviour."
        (if css-file
            "<link rel=\"stylesheet\" type=\"text/css\" href=\"org-mdbook.css\" />\n"
          ""))
-     
+
      ;; JS
      (if (and org-mdbook-embed-resources js-file (file-exists-p js-file))
          (concat "<script>\n" (org-mdbook--read-file js-file) "\n</script>\n")
